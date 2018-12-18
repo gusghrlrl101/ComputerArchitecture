@@ -1,0 +1,211 @@
+IMM 0 -4 :insert     // A
+IMD 1 2
+IMM 2 -4             // B
+IMM 3 -6
+IMD 4 4             // C
+IMM 5 -6
+STORE 0 0
+STORE 1 1
+STORE 2 2
+STORE 3 3
+STORE 4 4
+STORE 5 5
+IMM 0 -1             // D
+IMM 1 -1
+IMD 2 2             // E
+IMD 3 8
+IMD 4 6            // F
+IMD 5 1
+STORE 0 6
+STORE 1 7
+STORE 2 8
+STORE 3 9
+STORE 4 10
+STORE 5 11
+LOAD 0 0            // 1st AB, DE --> 0 1, 2 3, 6 7, 8 9
+LOAD 1 1
+LOAD 2 2
+LOAD 3 3
+LOAD 4 6
+LOAD 5 7
+LOAD 6 8
+LOAD 7 9
+IMD 12 inter_1
+JMP intersect
+JNE 14 finish :inter_1
+LOAD 0 0            // 2nd AB, EF --> 0 1, 2 3, 8 9, 10 11
+LOAD 1 1
+LOAD 2 2
+LOAD 3 3
+LOAD 4 8
+LOAD 5 9
+LOAD 6 10
+LOAD 7 11
+IMD 12 inter_2
+JMP intersect
+JNE 14 finish :inter_2
+LOAD 0 0            // 3rd AB, EF --> 0 1, 2 3, 10 11, 6 7
+LOAD 1 1
+LOAD 2 2
+LOAD 3 3
+LOAD 4 10
+LOAD 5 11
+LOAD 6 6
+LOAD 7 7
+IMD 12 inter_3
+JMP intersect
+JNE 14 finish :inter_3
+LOAD 0 2            // 4th BC, DE --> 2 3, 4 5, 6 7, 8 9
+LOAD 1 3
+LOAD 2 4
+LOAD 3 5
+LOAD 4 6
+LOAD 5 7
+LOAD 6 8
+LOAD 7 9
+IMD 12 inter_4
+JMP intersect
+JNE 14 finish :inter_4
+LOAD 0 2            // 5th BC, EF --> 2 3, 4 5, 8 9, 10 11
+LOAD 1 3
+LOAD 2 4
+LOAD 3 5
+LOAD 4 8
+LOAD 5 9
+LOAD 6 10
+LOAD 7 11
+IMD 12 inter_5
+JMP intersect
+JNE 14 finish :inter_5
+LOAD 0 2            // 6th BC, FD --> 2 3, 4 5, 10 11, 6 7
+LOAD 1 3
+LOAD 2 4
+LOAD 3 5
+LOAD 4 10
+LOAD 5 11
+LOAD 6 6
+LOAD 7 7
+IMD 12 inter_6
+JMP intersect
+JNE 14 finish :inter_6
+LOAD 0 4            // 7th CA, DE --> 4 5, 0 1, 6 7, 8 9
+LOAD 1 5
+LOAD 2 0
+LOAD 3 1
+LOAD 4 6
+LOAD 5 7
+LOAD 6 8
+LOAD 7 9
+IMD 12 inter_7
+JMP intersect
+JNE 14 finish :inter_7
+LOAD 0 4            // 8th CA, EF --> 4 5, 0 1, 8 9, 10 11
+LOAD 1 5
+LOAD 2 0
+LOAD 3 1
+LOAD 4 8
+LOAD 5 9
+LOAD 6 10
+LOAD 7 11
+IMD 12 inter_8
+JMP intersect
+JNE 14 finish :inter_8
+LOAD 0 4            // 9th CA, FD --> 4 5, 0 1, 10 11, 6 7
+LOAD 1 5
+LOAD 2 0
+LOAD 3 1
+LOAD 4 10
+LOAD 5 11
+LOAD 6 6
+LOAD 7 7
+IMD 12 inter_9
+JMP intersect
+JMP finish :inter_9
+STORE 0 12 :intersect   // intersect 함수 (a, b), (c, d) --> (12 13, 14 15), (16 17, 18 19)
+STORE 1 13
+STORE 2 14
+STORE 3 15
+STORE 4 16
+STORE 5 17
+STORE 6 18
+STORE 7 19
+LOAD 0 12      // CCW 1
+LOAD 1 13
+LOAD 2 14
+LOAD 3 15
+LOAD 4 16
+LOAD 5 17
+IMD 11 ccw_1
+JMP ccw
+STORE 13 20 :ccw_1   // CCW 2
+LOAD 0 12 
+LOAD 1 13
+LOAD 2 14
+LOAD 3 15
+LOAD 4 18
+LOAD 5 19
+IMD 11 ccw_2
+JMP ccw
+STORE 13 21 :ccw_2   // CCW 3
+LOAD 0 16
+LOAD 1 17
+LOAD 2 18
+LOAD 3 19
+LOAD 4 12
+LOAD 5 13
+IMD 11 ccw_3
+JMP ccw
+STORE 13 22 :ccw_3   // CCW 4
+LOAD 0 16
+LOAD 1 17
+LOAD 2 18
+LOAD 3 19
+LOAD 4 14
+LOAD 5 15
+IMD 11 ccw_4
+JMP ccw
+STORE 13 23 :ccw_4   // calculate
+LOAD 0 20
+LOAD 1 21
+LOAD 2 22
+LOAD 3 23
+MUL 4 0 1
+JGT 4 ccw_zero
+MUL 5 2 3
+JGT 5 ccw_zero
+IMD 14 1
+JDI 12
+IMD 14 0 :ccw_zero
+JDI 12            // intersect 끝
+SUB 6 2 0 :ccw      // ccw 함수 (a, b), c --> ((0, 1), (2, 3)), (4, 5)  dx1
+SUB 9 5 1         // dy2
+SUB 7 3 1         // dy1
+SUB 8 4 0         // dx2
+MUL 0 6 9         // dx1*dy2
+MUL 1 7 8         // dy1*dx2
+SUB 2 0 1         // dx1*dy2 - dy1*dx2
+JGT 2 return_plus
+JLT 2 return_minus
+JNE 6 next
+JNE 7 next
+JMP return_0
+MUL 3 6 8 :next      // dx1*dx2
+JLT 3 return_minus
+MUL 4 7 9         // dy1*dy2
+JLT 4 return_minus
+MUL 0 6 6         // dx1*dx1
+MUL 1 7 7         // dy1*dy1
+MUL 2 8 8         // dx2*dx2
+MUL 4 9 9         // dy2*dy2
+ADD 4 0 1
+ADD 5 2 3
+SUB 6 4 5
+JLT 6 return_plus
+IMD 13 0 :return_0
+JDI 11
+IMD 13 1 :return_plus
+JDI 11
+IMM 13 -1 :return_minus
+JDI 11            // ccw 끝
+IMD 15 1 :finish
+JMP current :current
