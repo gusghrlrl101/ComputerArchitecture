@@ -1,97 +1,59 @@
 # ComputerArchitecture
+
 Verilog를 이용한 두 삼각형의 충돌 여부 판단 CPU
 
+Vivado 18.02
 
+# Data Path
 
-input.txt 에 명령을 입력한 후 Assembly.exe를 실행시키면 output.txt에 변환된 기계어 생성
+![DataPath](./image/image.png)
 
+4 cycle, PipeLine 
 
+# Schemetic
 
-생성된 코드를 Data_Cache.v 파일 내에 붙여넣기
+![Schemetic](./image/image2.png)
 
+# 설명
 
+### Register (4 bit)
 
-시뮬레이션을 이용하여 결과 확인
+num | used
+--- | ---
+0	~ 10 | general register
+11 | ccw return adress
+12 | ccw return value
+13 | intersect return address
+14 | intersect return value
+15 | function finish
 
+### Data cache (16 bit)
 
+num | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |  -- |
+used | A1 | A2 | B1 | B2 | C1 | C2 | D1 | D2 | E1 | E2 | F1 | F2 | 
 
-Vivado 18.02 를 사용했음
+num | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 ~ 255 |
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+used | a1 | a2 | b1 | b2 | c1 | c2 | d1 | d2 | ccw1 | ccw2 | ccw3 | ccw4 | non-used |
 
+# 실행 방법
 
+![Assembly](./image/image3.png)
 
-----------------------
-Register	4bit
+1. input.txt 에 명령을 입력한 후 Assembly.exe를 실행시키면 output.txt에 변환된 기계어 생성
 
-0	
+2. 생성된 코드를 Data_Cache.v 파일 내에 붙여넣기
 
-...   general register
+3. 시뮬레이션을 이용하여 결과 확인
 
-10
+# 실행 결과
 
-11	ccw return adress
+#### 교차하는 경우
 
-12	ccw return value
+![Example1](./image/image4.png)
 
-13	intersect return address
+#### 교차하지 않는 경우
 
-14	intersect return value
+![Example2](./image/image5.png)
 
-15	function finish
-
----------------------
-
-Data cache	16bit
-
-0	A1	// 좌표 저장용
-
-1	A2
-
-2	B1
-
-3	B2
-
-4	C1
-
-5	C2
-
-6	D1
-
-7	D2
-
-8	E1
-
-9	E2
-
-10	F1
-
-11	F2
-
-12	a1	// intersect 계산용
-
-13	a2
-
-14	b1
-
-15	b2
-
-16	c1
-
-17	c2
-
-18	d1
-
-19	d2
-
-20	ccw1	// ccw 값
-
-21	ccw2
-
-22	ccw3
-
-23	ccw4
-
-24
-
-...   non-use
-
-255	
