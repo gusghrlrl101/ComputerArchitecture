@@ -22,7 +22,7 @@ Vivado 18.02
 
 ### CCW 알고리즘
 
-![Algorithm2](./image/image0-2.png)
+![Algorithm2](./image/image0-2.PNG)
 
 선분 교차 알고리즘은 CCW 알고리즘을 사용한다.
 
@@ -30,7 +30,7 @@ CCW 알고리즘은 3점이 주어지면 시계 반대 방향으로 위치하는
 
 ### Intersect 알고리즘
 
-![Algorithm3](./image/image0-3.png)
+![Algorithm3](./image/image0-3.PNG)
 
 선분 교차 알고리즘은 두 선분, 즉 각각 2개의 x, y 좌표가 주어진다.
 
@@ -46,17 +46,62 @@ CCW 알고리즘은 3점이 주어지면 시계 반대 방향으로 위치하는
 
 -2^31 <= n < 2^31
 
+# Instruction Set
+
+![ISA](./image/image1.png)
+
+16 bit로 구성되고 Orthogonal한 ISA로 구성하였다.
+
+### D-type (Data)
+
+![ISA1](./image/image6.png)
+
+* LOAD: Load Data to D from Addr
+* STORE: Store Data D in Addr
+* IMD: Set Immediate Data to D (uint)
+* IMM: Set Immediate Date to D (int)
+
+### F-type (Function)
+
+![ISA1](./image/image6.png)
+
+* ADD: [D] = [S1] + [S2]
+* SUB: [D] = [S1] - [S2]
+* MUL: [D] = [S1] * [S2]
+
+### J-type (Jump)
+
+![ISA1](./image/image6.png)
+
+* JMP: Jump to Addr
+* JDI: Jump to [D]
+* JNE: Jump to Addr if D != 0
+* JGT: Jump to Addr if D > 0
+* JLT: Jump to Addr if D < 0
+
 # Data Path
 
 ![DataPath](./image/image.png)
 
-4 cycle, PipeLine 
+### 4 Cycle PipeLine
+
+* Fetch & Decode
+
+* Excute/ALU
+
+* Data Read/Write
+
+* Register Write
+
+### DataForwarding
+
+* ControlUnit에서 DataForwarding 관리
 
 # Schemetic
 
 ![Schemetic](./image/image2.png)
 
-# 설명
+# Memory
 
 ### Register (4 bit)
 
@@ -95,7 +140,18 @@ used | a1 | a2 | b1 | b2 | c1 | c2 | d1 | d2 | ccw1 | ccw2 | ccw3 | ccw4 | non-u
 
 ![Example1](./image/image4.png)
 
+(AB와 DE, AB와 EF, AB와 FD), BC와 DE 4번의 수행 후 교차가 검출된 모습이다.
+
+4번의 흰색 줄이 경과되고 finish가 1이 되어 종료함을 뜻할 때 out의 값이 1이다.
+
+교차했을 때가 1이므로 교차한 것을 알 수 있다.
+
 #### 교차하지 않는 경우
 
 ![Example2](./image/image5.png)
 
+(AB와 DE, AB와 EF, AB와 FD), (BC와 DE, BC와 EF, BC와 FE), (CA와 DE, CA와 EF, CA와 FE) 9번의 수행이 이루어 졌다.
+
+finish가 1이 되어 종료함을 뜻할 때 out의 값이 0이다.
+
+교차했을 때가 1이므로 교차하지 않았음을 알 수 있다.
