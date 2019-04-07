@@ -4,6 +4,48 @@ Verilog를 이용한 두 삼각형의 충돌 여부 판단 CPU
 
 Vivado 18.02
 
+# Intro
+
+![Intro](./image/image0.png)
+
+두 삼각형, 즉 각각 3개의 x, y 좌표가 입력되면 두 삼각형의 충돌 여부를 알려준다.
+
+# Algorithm
+
+### 알고리즘 요약
+
+![Algorithm1](./image/image0-1.png)
+
+선분의 교차 알고리즘을 사용한다.
+
+각각 3개의 선분이 있으므로 총 3 X 3 = 9번 진행한다.
+
+### CCW 알고리즘
+
+![Algorithm2](./image/image0-2.png)
+
+선분 교차 알고리즘은 CCW 알고리즘을 사용한다.
+
+CCW 알고리즘은 3점이 주어지면 시계 반대 방향으로 위치하는지 검사한다.
+
+### Intersect 알고리즘
+
+![Algorithm3](./image/image0-3.png)
+
+선분 교차 알고리즘은 두 선분, 즉 각각 2개의 x, y 좌표가 주어진다.
+
+각각 4가지의 경우에서 CCW를 구하여 교차 여부를 알 수 있다.
+
+# Data Format
+
+### Data 자료형
+
+2's complement를 사용하는 32 bit Integer
+
+### 표현 가능 범위
+
+-2^31 <= n < 2^31
+
 # Data Path
 
 ![DataPath](./image/image.png)
